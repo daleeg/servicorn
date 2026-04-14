@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package servicorn.core.grpc.v1;
+
+message Header {
+  string name = 1;
+  string value = 2;
+}
+
+message RequestContext {
+  string trace_id = 1;
+  string caller = 2;
+  int32 timeout_ms = 3;
+  map<string, string> extras = 4;
+}
+
+message HttpRequest {
+  string http_method = 1;
+  string path = 2;
+  string query_string = 3;
+  repeated Header headers = 4;
+  bytes body = 5;
+}
+
+message ErrorInfo {
+  int32 code = 1;
+  string message = 2;
+}
+
+message ResponseResult {
+  int32 status_code = 1;
+  repeated Header headers = 2;
+  bytes body = 3;
+}
+
+message GrpcCallRequest {
+  HttpRequest request = 1;
+  RequestContext context = 2;
+}
+
+message GrpcCallResponse {
+  ResponseResult result = 1;
+  ErrorInfo error = 2;
+}
+
+service Gateway {
+  rpc GrpcCall(GrpcCallRequest) returns (GrpcCallResponse);
+}

@@ -1,37 +1,39 @@
 # servicorn
 
-`servicorn` is a gateway-style launcher for running Django `WSGI` applications behind a gRPC transport. It exposes two sides:
+`servicorn` 是一个面向 Django `WSGI` 应用的网关式启动器，当前通过 gRPC 作为服务端传输协议运行，并提供两类入口：
 
-- `run_server`: starts the gateway gRPC server and forwards `GrpcCall` requests into a Django/WSGI app
-- `run_client`: starts a FastAPI JSON-RPC gateway and forwards JSON-RPC requests to the gRPC server
+- `run_server`：启动 gRPC 网关服务端，把 `GrpcCall` 请求转给 Django/WSGI 应用
+- `run_client`：启动基于 FastAPI 的 JSON-RPC 网关，把 JSON-RPC 请求转发到 gRPC 服务端
 
-The current implementation is focused on a single flow:
+当前实现聚焦于一条主链路：
 
 `JSON-RPC -> gRPC -> WSGI -> Django`
 
-## Install
+## 安装
 
-This repository uses `/opt/venv/servicorn` as the default virtual environment.
+本仓库默认使用 `/opt/venv/servicorn` 作为 Python 虚拟环境。
+
+安装运行和测试依赖：
 
 ```bash
 /opt/venv/servicorn/bin/python -m pip install -e .[tests]
 ```
 
-If you only need runtime dependencies:
+如果只安装运行时依赖：
 
 ```bash
 /opt/venv/servicorn/bin/python -m pip install -e .
 ```
 
-## Usage
+## 使用方式
 
-Show the installed version:
+查看版本：
 
 ```bash
 /opt/venv/servicorn/bin/python manage.py version
 ```
 
-Start the gRPC gateway server and load a Django/WSGI application:
+启动 gRPC 网关服务端，并加载 Django/WSGI 应用：
 
 ```bash
 /opt/venv/servicorn/bin/python manage.py \
@@ -41,7 +43,7 @@ Start the gRPC gateway server and load a Django/WSGI application:
   run_server
 ```
 
-Start the JSON-RPC client gateway:
+启动 JSON-RPC 客户端网关：
 
 ```bash
 /opt/venv/servicorn/bin/python manage.py \
@@ -50,26 +52,26 @@ Start the JSON-RPC client gateway:
   run_client
 ```
 
-Useful client options:
+`run_client` 常用参数：
 
 - `--service-name`
 - `--reload`
 - `--workers`
 - `--log-level`
 
-Useful server options:
+`run_server` 常用参数：
 
 - `--service-name`
 - `--register-service`
 - `--workers`
 
-## INI Configuration
+## INI 配置
 
-Both `run_server` and `run_client` support `--ini`, with precedence:
+`run_server` 和 `run_client` 都支持通过 `--ini` 加载配置，优先级为：
 
-`CLI > environment variables > ini > defaults`
+`CLI > 环境变量 > ini > 默认值`
 
-Example:
+示例：
 
 ```ini
 [servicorn]
@@ -96,23 +98,23 @@ protocol = http
 prefix = /servicorn/services
 ```
 
-Run with:
+使用方式：
 
 ```bash
 /opt/venv/servicorn/bin/python manage.py --ini servicorn.ini run_server
 /opt/venv/servicorn/bin/python manage.py --ini servicorn.ini run_client
 ```
 
-`[etcd]` is shared by both `run_server` and `run_client`. The same values can also be overridden with environment variables:
+`[etcd]` 配置由 `run_server` 和 `run_client` 共用，也可以通过环境变量覆盖：
 
 - `ETCD_HOST`
 - `ETCD_PORT`
 - `ETCD_PROTOCOL`
 - `ETCD_PREFIX`
 
-## Tests
+## 测试
 
-Run the current test suite with:
+运行当前测试集：
 
 ```bash
 /opt/venv/servicorn/bin/python -m unittest discover -s tests -v

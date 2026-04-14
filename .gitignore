@@ -1,0 +1,16 @@
+.codex/
+.idea/
+.venv/
+.tox/
+.hypothesis/
+.cache/
+.eggs/
+.pytest_cache/
+.coverage
+.python-version
+__pycache__/
+*.egg-info
+*.pyc
+build/
+dist/
+.vscode/

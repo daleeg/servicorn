@@ -1,0 +1,88 @@
+[project]
+name = "servicorn"
+dynamic = ["version", "readme"]
+description = "Twisted-driven RPC gateway for running Django applications over WSGI"
+requires-python = ">=3.9"
+authors = [
+    { name = "Servicorn Contributors" },
+]
+license = { text = "BSD" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+]
+dependencies = [
+    "click>=8.1,<9",
+    "django>=4.2",
+    "etcd3-py>=0.1,<1",
+    "grpcio>=1.78,<2",
+    "orjson>=3.11,<4",
+    "pydantic>=2.12,<3",
+    "protobuf>=5,<7",
+    "twisted[tls]>=22.4",
+]
+
+[project.optional-dependencies]
+tests = [
+    "black",
+    "flake8",
+    "flake8-bugbear",
+    "grpcio-tools>=1.78,<2",
+    "hypothesis",
+    "isort",
+    "mypy",
+    "pytest",
+    "pytest-cov",
+    "tox",
+]
+
+[project.urls]
+homepage = "https://github.com/example/servicorn"
+repository = "https://github.com/example/servicorn.git"
+issues = "https://github.com/example/servicorn/issues"
+
+[project.scripts]
+servicorn = "servicorn.management.root:execute_from_command_line"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["servicorn*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "servicorn.__version__" }
+readme = { file = "README.md", content-type = "text/markdown" }
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::pytest.PytestDeprecationWarning"]
+
+[tool.coverage.run]
+omit = ["tests/*"]
+concurrency = ["multiprocessing"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.coverage.html]
+directory = "reports/coverage_html_report"
